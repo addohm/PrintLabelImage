@@ -3,7 +3,7 @@ Imports System.Windows.Forms
 
 Public Class FormSettingsPrinter
 
-    Public location As Integer
+    Public position As Integer
 
     Private Sub ApplicationSetup_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'load all txtboxes with data from db
@@ -16,7 +16,7 @@ Public Class FormSettingsPrinter
 
     Private Sub btnSettingsCancel_Click(sender As Object, e As EventArgs) Handles btnSettingsCancel.Click
         'close the form and revert any changes
-        ReadSettingsFromDBtoSettings(location)
+        ReadSettingsFromDBtoSettings(position)
         Close()
     End Sub
 

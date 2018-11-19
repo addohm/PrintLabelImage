@@ -143,6 +143,92 @@ Public Class SatoPrintJob
 
     End Sub
 
+    ''' <summary>
+    ''' A second type of printing which prints only the select text passed
+    ''' </summary>
+    ''' <param name="transmit"></param>
+    ''' <param name="stringText"></param>
+    Friend Shared Sub TransmitString(transmit As Boolean, stringText As String)
+
+        'prefix text
+        Dim startOfText As Byte() = Encoding.ASCII.GetBytes(Sot)
+        Dim startJob As Byte() = Encoding.ASCII.GetBytes(Esc & "A")
+        Dim fHPos As Byte() = Encoding.ASCII.GetBytes(Esc & "H" & ThisSessionH)
+        Dim fVPos As Byte() = Encoding.ASCII.GetBytes(Esc & "V" & ThisSessionV)
+        Dim fEnlargement As Byte() = Encoding.ASCII.GetBytes(Esc & "L0" & ThisSessionS & "0" & ThisSessionS)
+        Dim fRotation As Byte() = Encoding.ASCII.GetBytes(Esc & "%" & ThisSessionR)
+        Dim prefix As Integer = startOfText.Length +
+                     startJob.Length +
+                     fHPos.Length +
+                     fVPos.Length +
+                     fEnlargement.Length +
+                     fRotation.Length
+        Dim prefixOutStream(prefix - 1) As Byte
+
+        startOfText.CopyTo(prefixOutStream, 0)
+        startJob.CopyTo(prefixOutStream, startOfText.Length)
+        fHPos.CopyTo(prefixOutStream, startOfText.Length + startJob.Length)
+        fVPos.CopyTo(prefixOutStream, startOfText.Length + startJob.Length + fHPos.Length)
+        fEnlargement.CopyTo(prefixOutStream, startOfText.Length + startJob.Length + fHPos.Length + fVPos.Length)
+        fRotation.CopyTo(prefixOutStream,
+                         startOfText.Length + startJob.Length + fHPos.Length + fVPos.Length + fEnlargement.Length)
+
+        'string text
+        Dim fstringPrefix As Byte() = Encoding.ASCII.GetBytes(Esc & "CC2" & Esc & "RDX01")
+        Dim fstringText As Byte() = Encoding.ASCII.GetBytes(stringText)
+        Dim ftext As Integer = fstringPrefix.Length + fstringText.Length
+        Dim textOutStream(ftext - 1) As Byte
+
+        fstringPrefix.CopyTo(textOutStream, 0)
+        fstringText.CopyTo(textOutStream, fstringPrefix.Length)
+
+        'suffix text
+        Dim endOfText As Byte() = Encoding.ASCII.GetBytes(Eot)
+        Dim endJob As Byte() = Encoding.ASCII.GetBytes(Esc & "Z")
+        Dim jobQty As Byte() = Encoding.ASCII.GetBytes(Esc & "Q1")
+        Dim suffix = endOfText.Length +
+                     endJob.Length +
+                     jobQty.Length
+        Dim suffixOutStream(suffix - 1) As Byte
+        jobQty.CopyTo(suffixOutStream, 0)
+        endJob.CopyTo(suffixOutStream, jobQty.Length)
+        endOfText.CopyTo(suffixOutStream, jobQty.Length + endJob.Length)
+
+        Try
+            'transmite the outstream byte array to the specified address
+            If transmit = True Then
+                Using skt As New TcpClient()
+                    Try
+                        skt.Connect(ThisSessionAddr, 9100)
+                    Catch ex As Exception
+                        MsgBox("SATO Connect Error (Label)")
+                    End Try
+                    Using ns As NetworkStream = skt.GetStream()
+                        If ns.CanWrite Then
+                            ns.Write(prefixOutStream, 0, prefixOutStream.Length)
+                            ns.Write(textOutStream, 0, textOutStream.Length)
+                            ns.Write(suffixOutStream, 0, suffixOutStream.Length)
+                            ns.Flush()
+                        End If
+                    End Using
+                End Using
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+
+        'save the outstream to a file
+        Dim labelPath As String = Path.GetTempPath & "IntSATO.lbl"
+        If File.Exists(labelPath) Then
+            File.Delete(labelPath)
+        End If
+        Using fs As New FileStream(labelPath, FileMode.Append, FileAccess.Write)
+            fs.Write(prefixOutStream, 0, prefixOutStream.Length)
+            fs.Write(textOutStream, 0, textOutStream.Length)
+            fs.Write(suffixOutStream, 0, suffixOutStream.Length)
+        End Using
+
+    End Sub
 End Class
 
 ''' <summary>

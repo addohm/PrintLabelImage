@@ -183,17 +183,19 @@ Module Main
         Dim setupMode As Boolean = False
         Dim serialNo As String = String.Empty
         Dim printposition As Integer = 0
+        Dim roboticsState As Integer = 0
         Dim statusQuery As Boolean = False
         Dim printEnable As Boolean = False
 
         'remove the first array element (file path) and shift the rest
         Dim args() As String = Environment.GetCommandLineArgs()
         args = args.Skip(1).ToArray
-        If args.Length = 1 Then
+
+        If args.Length >= 1 Then
             If HelpRequired(args(0)) Then
                 DisplayHelp()
             End If
-        Else
+
             'Parse all the command line arguments
             For Each c In args
                 Dim argVal As String = String.Empty
@@ -241,12 +243,15 @@ Module Main
                         .Save()
                     End With
 
+                    roboticsState = GetRoboticsState()
+
                     ReadSettingsFromDBtoSettings(printposition)
 
                     'Attain and print label at the defined position using the saved settings
                     If setupMode = False Then
                         'Save the image and return the file path
-                        Dim imagePath As String = WriteImageFromDb(printposition, serialNo)
+                        Dim imagePath As String
+                        If roboticsState = 2 Then imagePath = WriteImageFromDb(printposition, serialNo)
 
                         Select Case printposition
                 'Sato printers
@@ -277,7 +282,9 @@ Module Main
                                     End Select
                                 End With
                                 If statusQuery = True Then SatoUtilities.PrinterStatus()
-                                SatoPrintJob.TransmitImage(imagePath, printEnable)
+
+                                If roboticsState = 2 Then SatoPrintJob.TransmitImage(imagePath, printEnable)
+                                If roboticsState = 3 Then SatoPrintJob.TransmitString(printEnable, GetRawPart(serialNo))
                 'Cab printer
                             Case 2
                                 With My.Settings
@@ -289,17 +296,18 @@ Module Main
                                     CabPrintJob.ThisSessionS = .ShippingA_Size
                                 End With
                                 If statusQuery = True Then CabUtilities.PrinterStatus()
-                                CabPrintJob.TransmitImage(imagePath, printEnable)
+                                If roboticsState = 2 Then CabPrintJob.TransmitImage(imagePath, printEnable)
+                                If roboticsState = 3 Then CabPrintJob.TransmitString(printEnable, GetRawPart(serialNo))
                 'Zebra Printer
                             Case 5
                                 Dim manualShipForm As New ShippingMPrintForm With {
-                                    .ImagePath = imagePath
-                                    }
+                                .ImagePath = imagePath
+                                }
                                 manualShipForm.Show()
                                 manualShipForm.Print()
                             Case Else
                                 MsgBox("Error - either no position, or an invalid position was specified", vbOK,
-                                   "Integra Optics Printer Controller")
+                               "Integra Optics Printer Controller")
                         End Select
 
                     End If
@@ -317,6 +325,29 @@ Module Main
             Return True
         End If
         Return False
+    End Function
+
+    Private Function GetRoboticsState() As Integer
+        Using conn = New SqlConnection(My.Settings.ConnStr)
+            Using cmd = New SqlCommand("select operating_state from machine_state where active = 'true'", conn)
+                conn.Open()
+                GetRoboticsState = Convert.ToInt32(cmd.ExecuteScalar)
+            End Using
+        End Using
+    End Function
+
+    Private Function GetRawPart(serial As String) As String
+        Using conn = New SqlConnection(My.Settings.ConnStr)
+            Using cmd = New SqlCommand()
+                cmd.Connection = conn
+                conn.Open()
+                cmd.CommandText = "select raw_part_number from pull_from_stock_job_queue j " _
+                                    & "join pull_from_stock_optics o " _
+                                    & "on j.job_id = o.job_id " _
+                                    & "where o.serial_number = '" & serial & "'"
+                GetRawPart = cmd.ExecuteScalar
+            End Using
+        End Using
     End Function
 
     Private Sub DisplayHelp()

@@ -69,7 +69,7 @@ Public Class CabPrintJob
         downloadToPrinter.CopyTo(prefixOutStream, eraseRamImage.Length)
         startAndEndOfData.CopyTo(prefixOutStream, eraseRamImage.Length + downloadToPrinter.Length)
 
-        'suffix Text
+        'setup Text
         Dim carriageReturn As Byte() = Encoding.ASCII.GetBytes(Cr)
         Dim lang As Byte() = Encoding.ASCII.GetBytes("l US" & Cr)
         Dim meas As Byte() = Encoding.ASCII.GetBytes("m m" & Cr)
@@ -176,6 +176,95 @@ Public Class CabPrintJob
             fs.Write(prefixOutStream, 0, prefixOutStream.Length)
             fs.Write(imageData, 0, imageData.Length)
             fs.Write(suffixOutStream, 0, suffixOutStream.Length)
+            'below for testing against download.exe
+            'fs.Write(Encoding.ASCII.GetBytes(ESC & "."), 0, Encoding.ASCII.GetBytes(ESC & ".").Length)
+        End Using
+
+    End Sub
+
+    ''' <summary>
+    '''     Takes the file from the specified path and converts it to a usable format
+    '''     Adds in the required printer commands before and after the image data
+    '''     then sends the data to the printer and\or creates a label file for review
+    ''' </summary>
+
+    Public Shared Sub TransmitString(transmit As Boolean, stringText As String)
+
+        'Prexix Text
+        Dim lang As Byte() = Encoding.ASCII.GetBytes("l US" & Cr)
+        Dim meas As Byte() = Encoding.ASCII.GetBytes("m m" & Cr)
+        Dim zeros As Byte() = Encoding.ASCII.GetBytes("J SFP" & Cr)
+        Dim labelDimensions As Byte() = Encoding.ASCII.GetBytes("S l1;0.0,0.0,9.50,12.8,32.4;SFP" & Cr)
+        Dim printSettings As Byte() = Encoding.ASCII.GetBytes("H 50,5,T,R0,B0" & Cr)
+        Dim backfeed As Byte() = Encoding.ASCII.GetBytes("O P" & Cr)
+        Dim peel As Byte() = Encoding.ASCII.GetBytes("P" & Cr)
+        Dim jobQty As Byte() = Encoding.ASCII.GetBytes("A 1" & Cr)
+
+        'string Text
+        Dim tCommand As Byte() = Encoding.ASCII.GetBytes($"T:Line1;" &
+                                                         ThisSessionV & "," &
+                                                         ThisSessionH & "," &
+                                                         ThisSessionR & ",97" &
+                                                         ThisSessionS & ",b,q75;")
+        Dim fstringText As Byte() = Encoding.ASCII.GetBytes(stringText)
+        Dim carriageReturn As Byte() = Encoding.ASCII.GetBytes(Cr)
+
+        Dim fullstring As Integer = lang.Length +
+                                    meas.Length +
+                                    zeros.Length +
+                                    labelDimensions.Length +
+                                    printSettings.Length +
+                                    backfeed.Length +
+                                    peel.Length +
+                                    tCommand.Length +
+                                    fstringText.Length +
+                                    carriageReturn.Length +
+                                    jobQty.Length
+
+        Dim outStream(fullstring - 1) As Byte
+
+
+        lang.CopyTo(outStream, 0)
+        meas.CopyTo(outStream, lang.Length)
+        zeros.CopyTo(outStream, lang.Length + meas.Length)
+        labelDimensions.CopyTo(outStream, lang.Length + meas.Length + zeros.Length)
+        printSettings.CopyTo(outStream, lang.Length + meas.Length + zeros.Length + labelDimensions.Length)
+        backfeed.CopyTo(outStream, lang.Length + meas.Length + zeros.Length + labelDimensions.Length + printSettings.Length)
+        peel.CopyTo(outStream, lang.Length + meas.Length + zeros.Length + labelDimensions.Length + printSettings.Length + backfeed.Length)
+        tCommand.CopyTo(outStream, lang.Length + meas.Length + zeros.Length + labelDimensions.Length + printSettings.Length + backfeed.Length + peel.Length)
+        fstringText.CopyTo(outStream, lang.Length + meas.Length + zeros.Length + labelDimensions.Length + printSettings.Length + backfeed.Length + peel.Length + tCommand.Length)
+        carriageReturn.CopyTo(outStream, lang.Length + meas.Length + zeros.Length + labelDimensions.Length + printSettings.Length + backfeed.Length + peel.Length + tCommand.Length + fstringText.Length)
+        jobQty.CopyTo(outStream, lang.Length + meas.Length + zeros.Length + labelDimensions.Length + printSettings.Length + backfeed.Length + peel.Length + tCommand.Length + fstringText.Length + carriageReturn.Length)
+
+        Try
+            If transmit = True Then
+                Using skt As New TcpClient()
+                    Try
+                        skt.Connect(ThisSessionAddr, 9100)
+                    Catch ex As Exception
+                        MsgBox("CAB Connect Error (Label)")
+                        Exit Sub
+                    End Try
+                    Using ns As NetworkStream = skt.GetStream()
+                        If ns.CanWrite Then
+                            ns.Write(outStream, 0, outStream.Length)
+                            ns.Flush()
+                        End If
+                    End Using
+                End Using
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+
+        Dim labelPath As String = Path.GetTempPath & "IntCAB.lbl"
+        If File.Exists(labelPath) Then
+            File.Delete(labelPath)
+        End If
+        Using fs As New FileStream(labelPath, FileMode.Append, FileAccess.Write)
+            'below for testing against download.exe
+            'fs.Write(Encoding.ASCII.GetBytes("d PNG;INTEGRACABLABEL" & CR & ESC & "."), 0, Encoding.ASCII.GetBytes("d PNG;INTEGRACABLABEL" & CR & ESC & ".").Length)
+            fs.Write(outStream, 0, outStream.Length)
             'below for testing against download.exe
             'fs.Write(Encoding.ASCII.GetBytes(ESC & "."), 0, Encoding.ASCII.GetBytes(ESC & ".").Length)
         End Using

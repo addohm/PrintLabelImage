@@ -68,7 +68,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("ROBOTICS_OPTICS_DEV")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("ROBOTICS_OPTICS")>  _
         Public Property sqlDBName() As String
             Get
                 Return CType(Me("sqlDBName"),String)
@@ -80,7 +80,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("robotuser")>  _
         Public Property sqlUsername() As String
             Get
                 Return CType(Me("sqlUsername"),String)
@@ -92,7 +92,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("R0b0tik0verlordz")>  _
         Public Property sqlPassword() As String
             Get
                 Return CType(Me("sqlPassword"),String)

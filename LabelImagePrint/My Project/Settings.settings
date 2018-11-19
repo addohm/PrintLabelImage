@@ -6,13 +6,13 @@
       <Value Profile="(Default)">AI01</Value>
     </Setting>
     <Setting Name="sqlDBName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">ROBOTICS_OPTICS_DEV</Value>
+      <Value Profile="(Default)">ROBOTICS_OPTICS</Value>
     </Setting>
     <Setting Name="sqlUsername" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">robotuser</Value>
     </Setting>
     <Setting Name="sqlPassword" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">R0b0tik0verlordz</Value>
     </Setting>
     <Setting Name="XFP_PrinterAddr" Type="System.String" Scope="User">
       <Value Profile="(Default)">192.168.1.126</Value>

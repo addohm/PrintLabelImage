@@ -127,52 +127,94 @@ Module Main
                 With cmd
                     .Connection = connection
                     connection.Open()
-                    If position = 1 Then
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_XFPh'"
-                        My.Settings.XFP_Horizontal = Convert.ToInt32(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_XFPv'"
-                        My.Settings.XFP_Vertical = Convert.ToInt32(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_XFPs'"
-                        My.Settings.XFP_Size = Convert.ToInt32(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_XFPr'"
-                        My.Settings.XFP_Rotation = Convert.ToInt32(.ExecuteScalar)
-                    ElseIf position = 2 Then
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_SFPh'"
-                        My.Settings.SFP_Horizontal = Convert.ToDecimal(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_SFPv'"
-                        My.Settings.SFP_Vertical = Convert.ToDecimal(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_SFPs'"
-                        My.Settings.SFP_Size = Convert.ToDecimal(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_SFPr'"
-                        My.Settings.SFP_Rotation = Convert.ToInt32(.ExecuteScalar)
-                    ElseIf position = 3 Then
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_Clamshellh'"
-                        My.Settings.Clamshell_Horizontal = Convert.ToInt32(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_Clamshellv'"
-                        My.Settings.Clamshell_Vertical = Convert.ToInt32(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_Clamshells'"
-                        My.Settings.Clamshell_Size = Convert.ToInt32(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_Clamshellr'"
-                        My.Settings.Clamshell_Rotation = Convert.ToInt32(.ExecuteScalar)
-                    ElseIf position = 4 Then
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippinghA'"
-                        My.Settings.ShippingA_Horizontal = Convert.ToInt32(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingvA'"
-                        My.Settings.ShippingA_Vertical = Convert.ToInt32(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingsA'"
-                        My.Settings.ShippingA_Size = Convert.ToInt32(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingrA'"
-                        My.Settings.ShippingA_Rotation = Convert.ToInt32(.ExecuteScalar)
-                    ElseIf position = 5 Then
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippinghM'"
-                        My.Settings.ShippingM_Horizontal = Convert.ToInt32(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingvM'"
-                        My.Settings.ShippingM_Vertical = Convert.ToInt32(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingsM'"
-                        My.Settings.ShippingM_Size = Convert.ToInt32(.ExecuteScalar)
-                        .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingrM'"
-                        My.Settings.ShippingM_Rotation = Convert.ToInt32(.ExecuteScalar)
-                    End If
+                    Select Case position
+                        Case 1
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_XFPh'"
+                            My.Settings.XFP_Horizontal = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_XFPv'"
+                            My.Settings.XFP_Vertical = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_XFPs'"
+                            My.Settings.XFP_Size = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_XFPr'"
+                            My.Settings.XFP_Rotation = Convert.ToInt32(.ExecuteScalar)
+                        Case 2
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_SFPh'"
+                            My.Settings.SFP_Horizontal = Convert.ToDecimal(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_SFPv'"
+                            My.Settings.SFP_Vertical = Convert.ToDecimal(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_SFPs'"
+                            My.Settings.SFP_Size = Convert.ToDecimal(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_SFPr'"
+                            My.Settings.SFP_Rotation = Convert.ToInt32(.ExecuteScalar)
+                        Case 3
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_Clamshellh'"
+                            My.Settings.Clamshell_Horizontal = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_Clamshellv'"
+                            My.Settings.Clamshell_Vertical = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_Clamshells'"
+                            My.Settings.Clamshell_Size = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_Clamshellr'"
+                            My.Settings.Clamshell_Rotation = Convert.ToInt32(.ExecuteScalar)
+                        Case 4
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippinghA'"
+                            My.Settings.ShippingA_Horizontal = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingvA'"
+                            My.Settings.ShippingA_Vertical = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingsA'"
+                            My.Settings.ShippingA_Size = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingrA'"
+                            My.Settings.ShippingA_Rotation = Convert.ToInt32(.ExecuteScalar)
+                        Case 5
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippinghM'"
+                            My.Settings.ShippingM_Horizontal = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingvM'"
+                            My.Settings.ShippingM_Vertical = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingsM'"
+                            My.Settings.ShippingM_Size = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingrM'"
+                            My.Settings.ShippingM_Rotation = Convert.ToInt32(.ExecuteScalar)
+                        Case Else
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_XFPh'"
+                            My.Settings.XFP_Horizontal = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_XFPv'"
+                            My.Settings.XFP_Vertical = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_XFPs'"
+                            My.Settings.XFP_Size = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_XFPr'"
+                            My.Settings.XFP_Rotation = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_SFPh'"
+                            My.Settings.SFP_Horizontal = Convert.ToDecimal(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_SFPv'"
+                            My.Settings.SFP_Vertical = Convert.ToDecimal(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_SFPs'"
+                            My.Settings.SFP_Size = Convert.ToDecimal(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_SFPr'"
+                            My.Settings.SFP_Rotation = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_Clamshellh'"
+                            My.Settings.Clamshell_Horizontal = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_Clamshellv'"
+                            My.Settings.Clamshell_Vertical = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_Clamshells'"
+                            My.Settings.Clamshell_Size = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_Clamshellr'"
+                            My.Settings.Clamshell_Rotation = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippinghA'"
+                            My.Settings.ShippingA_Horizontal = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingvA'"
+                            My.Settings.ShippingA_Vertical = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingsA'"
+                            My.Settings.ShippingA_Size = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingrA'"
+                            My.Settings.ShippingA_Rotation = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippinghM'"
+                            My.Settings.ShippingM_Horizontal = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingvM'"
+                            My.Settings.ShippingM_Vertical = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingsM'"
+                            My.Settings.ShippingM_Size = Convert.ToInt32(.ExecuteScalar)
+                            .CommandText = "select setting_value from system_settings where setting_name = 'LABEL_ShippingrM'"
+                            My.Settings.ShippingM_Rotation = Convert.ToInt32(.ExecuteScalar)
+                    End Select
                 End With
             End Using
         End Using
@@ -192,9 +234,7 @@ Module Main
         args = args.Skip(1).ToArray
 
         If args.Length >= 1 Then
-            If HelpRequired(args(0)) Then
-                DisplayHelp()
-            End If
+            If HelpRequired(args(0)) Then DisplayHelp()
 
             'Parse all the command line arguments
             For Each c In args
@@ -207,7 +247,7 @@ Module Main
                 End If
                 Select Case arg
                     Case "setup"
-                        setupMode = Convert.ToBoolean(Convert.ToInt32(argVal))
+                        setupMode = True
                     Case "serial"
                         serialNo = argVal
                     Case "position"
@@ -219,9 +259,22 @@ Module Main
                 End Select
             Next
 
+            Dim cb As New SqlConnectionStringBuilder With {
+                    .DataSource = My.Settings.sqlServer,
+                    .InitialCatalog = My.Settings.sqlDBName,
+                    .UserID = My.Settings.sqlUsername,
+                    .Password = My.Settings.sqlPassword
+                 }
+
+            With My.Settings
+                .ConnStr = cb.ToString()
+                .Save()
+            End With
+
             'Open setup dialoge
             If setupMode = True Then
                 Dim printSettingsForm As New FormSettingsPrinter
+                ReadSettingsFromDBtoSettings(0)
                 printSettingsForm.position = printposition
                 'load all txtboxes with data from db before the form load
                 printSettingsForm.UpdateFormFields()
@@ -231,17 +284,7 @@ Module Main
 
                 If Not serialNo = String.Empty And Not printposition = 0 Then
 
-                    Dim cb As New SqlConnectionStringBuilder With {
-                    .DataSource = My.Settings.sqlServer,
-                    .InitialCatalog = My.Settings.sqlDBName,
-                    .UserID = My.Settings.sqlUsername,
-                    .Password = My.Settings.sqlPassword
-                 }
 
-                    With My.Settings
-                        .ConnStr = cb.ToString()
-                        .Save()
-                    End With
 
                     roboticsState = GetRoboticsState()
 
@@ -250,7 +293,7 @@ Module Main
                     'Attain and print label at the defined position using the saved settings
                     If setupMode = False Then
                         'Save the image and return the file path
-                        Dim imagePath As String
+                        Dim imagePath As String = ""
                         If roboticsState = 2 Then imagePath = WriteImageFromDb(printposition, serialNo)
 
                         Select Case printposition
@@ -357,11 +400,11 @@ Module Main
         Console.WriteLine("http://automationintegrity.net")
         Console.WriteLine("======================================================================")
         Console.WriteLine("Arguments:")
-        Console.WriteLine("setup (1 or 0) - Access the setup menu")
+        Console.WriteLine("setup - Access the setup menu")
         Console.WriteLine("serial (string) - The serial number appropriate to the position being printed")
         Console.WriteLine("position (1 to 5) - The printer position where the label is expected")
-        Console.WriteLine("status (1 or 0 - Includes querying the printer status")
-        Console.WriteLine("print (1 or 0) - Includes print control")
+        Console.WriteLine("status - Includes querying the printer status")
+        Console.WriteLine("print - Includes print control")
         Console.WriteLine("======================================================================")
         Console.WriteLine("Positions:")
         Console.WriteLine("1 - XFP Printer (SATO)")
@@ -381,6 +424,7 @@ Module Main
         Console.WriteLine("> In %TEMP% you can view the image and label file produced by the code.")
         Console.WriteLine("> The final product label would be called 'IntegraCLabel.png' where C is a clamshell label.")
         Console.WriteLine("> The final label syntax files would be called IntSATO.lbl or IntCAB.lbl")
+        Environment.Exit(0)
     End Sub
 
 End Module

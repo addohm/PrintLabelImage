@@ -23,7 +23,7 @@ Partial Class FormSettingsPrinter
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Me.TabControl = New System.Windows.Forms.TabControl()
+        Me.tcPrinters = New System.Windows.Forms.TabControl()
         Me.tabXFP = New System.Windows.Forms.TabPage()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.urlXFP = New System.Windows.Forms.LinkLabel()
@@ -96,11 +96,13 @@ Partial Class FormSettingsPrinter
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DatabaseSettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TestPrintToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.TabControl.SuspendLayout()
+        Me.tcPrinters.SuspendLayout()
         Me.tabXFP.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tabSFP.SuspendLayout()
@@ -114,18 +116,18 @@ Partial Class FormSettingsPrinter
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
-        'TabControl
+        'tcPrinters
         '
-        Me.TabControl.Controls.Add(Me.tabXFP)
-        Me.TabControl.Controls.Add(Me.tabSFP)
-        Me.TabControl.Controls.Add(Me.tabClamshell)
-        Me.TabControl.Controls.Add(Me.tabShippingA)
-        Me.TabControl.Controls.Add(Me.tabShippingM)
-        Me.TabControl.Location = New System.Drawing.Point(12, 27)
-        Me.TabControl.Name = "TabControl"
-        Me.TabControl.SelectedIndex = 0
-        Me.TabControl.Size = New System.Drawing.Size(417, 154)
-        Me.TabControl.TabIndex = 5
+        Me.tcPrinters.Controls.Add(Me.tabXFP)
+        Me.tcPrinters.Controls.Add(Me.tabSFP)
+        Me.tcPrinters.Controls.Add(Me.tabClamshell)
+        Me.tcPrinters.Controls.Add(Me.tabShippingA)
+        Me.tcPrinters.Controls.Add(Me.tabShippingM)
+        Me.tcPrinters.Location = New System.Drawing.Point(12, 27)
+        Me.tcPrinters.Name = "tcPrinters"
+        Me.tcPrinters.SelectedIndex = 0
+        Me.tcPrinters.Size = New System.Drawing.Size(417, 154)
+        Me.tcPrinters.TabIndex = 5
         '
         'tabXFP
         '
@@ -789,7 +791,7 @@ Partial Class FormSettingsPrinter
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DatabaseSettingsToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DatabaseSettingsToolStripMenuItem, Me.TestPrintToolStripMenuItem, Me.ToolStripSeparator1, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
@@ -797,13 +799,24 @@ Partial Class FormSettingsPrinter
         'DatabaseSettingsToolStripMenuItem
         '
         Me.DatabaseSettingsToolStripMenuItem.Name = "DatabaseSettingsToolStripMenuItem"
-        Me.DatabaseSettingsToolStripMenuItem.Size = New System.Drawing.Size(167, 22)
+        Me.DatabaseSettingsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.DatabaseSettingsToolStripMenuItem.Text = "Database Settings"
+        '
+        'TestPrintToolStripMenuItem
+        '
+        Me.TestPrintToolStripMenuItem.Name = "TestPrintToolStripMenuItem"
+        Me.TestPrintToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.TestPrintToolStripMenuItem.Text = "Test Print Settings"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(177, 6)
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(167, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'HelpToolStripMenuItem
@@ -819,7 +832,7 @@ Partial Class FormSettingsPrinter
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.AboutToolStripMenuItem.Text = "About"
         '
-        'FormSettings_Printer
+        'FormSettingsPrinter
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -828,12 +841,12 @@ Partial Class FormSettingsPrinter
         Me.Controls.Add(Me.btnSettingsApply)
         Me.Controls.Add(Me.btnSettingsCancel)
         Me.Controls.Add(Me.btnSettingsOkay)
-        Me.Controls.Add(Me.TabControl)
+        Me.Controls.Add(Me.tcPrinters)
         Me.Controls.Add(Me.MenuStrip1)
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "FormSettingsPrinter"
         Me.Text = "Label Printing Application Settings"
-        Me.TabControl.ResumeLayout(False)
+        Me.tcPrinters.ResumeLayout(False)
         Me.tabXFP.ResumeLayout(False)
         Me.tabXFP.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -855,7 +868,6 @@ Partial Class FormSettingsPrinter
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents TabControl As Windows.Forms.TabControl
     Friend WithEvents tabXFP As Windows.Forms.TabPage
     Friend WithEvents tabSFP As Windows.Forms.TabPage
     Friend WithEvents tabClamshell As Windows.Forms.TabPage
@@ -932,4 +944,7 @@ Partial Class FormSettingsPrinter
     Friend WithEvents HelpToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents AboutToolStripMenuItem As Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolTip1 As Windows.Forms.ToolTip
+    Friend WithEvents TestPrintToolStripMenuItem As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As Windows.Forms.ToolStripSeparator
+    Friend WithEvents tcPrinters As Windows.Forms.TabControl
 End Class

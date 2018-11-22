@@ -1,5 +1,7 @@
 ﻿Imports System.Data.SqlClient
 Imports System.Windows.Forms
+Imports System.IO
+Imports System.Drawing
 
 Public Class FormSettingsPrinter
 
@@ -28,9 +30,104 @@ Public Class FormSettingsPrinter
     End Sub
 
     Private Sub btnSettingsTestPrint_Click(sender As Object, e As EventArgs) Handles btnSettingsTestPrint.Click
-        'Send test print job using the currently displayed settings (me.settings)
+        Dim tabIndex As Integer = tcPrinters.SelectedIndex + 1
+        Dim imagePath As String = Path.Combine(Path.GetTempPath(), "labelGrid.png")
+
+        If File.Exists(imagePath) Then
+
+            Dim cb As New SqlConnectionStringBuilder With {
+                    .DataSource = My.Settings.sqlServer,
+                    .InitialCatalog = My.Settings.sqlDBName,
+                    .UserID = My.Settings.sqlUsername,
+                    .Password = My.Settings.sqlPassword
+                 }
+
+            With My.Settings
+                .ConnStr = cb.ToString()
+                .Save()
+            End With
+
+            Select Case tabIndex
+                Case 1
+                    With My.Settings
+                        SatoUtilities.ThisSessionAddr = .XFP_PrinterAddr
+                        SatoPrintJob.ThisSessionAddr = .XFP_PrinterAddr
+                        SatoPrintJob.ThisSessionH = .XFP_Horizontal
+                        SatoPrintJob.ThisSessionV = .XFP_Vertical
+                        SatoPrintJob.ThisSessionR = .XFP_Rotation
+                        SatoPrintJob.ThisSessionS = .XFP_Size
+                    End With
+                Case 2
+                    With My.Settings
+                        CabUtilities.ThisSessionAddr = .ShippingA_PrinterAddr
+                        CabPrintJob.ThisSessionAddr = .ShippingA_PrinterAddr
+                        CabPrintJob.ThisSessionH = .ShippingA_Horizontal
+                        CabPrintJob.ThisSessionV = .ShippingA_Vertical
+                        CabPrintJob.ThisSessionR = .ShippingA_Rotation
+                        CabPrintJob.ThisSessionS = .ShippingA_Size
+                    End With
+                Case 3
+                    With My.Settings
+                        SatoUtilities.ThisSessionAddr = .Clamshell_PrinterAddr
+                        SatoPrintJob.ThisSessionAddr = .Clamshell_PrinterAddr
+                        SatoPrintJob.ThisSessionH = .Clamshell_Horizontal
+                        SatoPrintJob.ThisSessionV = .Clamshell_Vertical
+                        SatoPrintJob.ThisSessionR = .Clamshell_Rotation
+                        SatoPrintJob.ThisSessionS = .Clamshell_Size
+                    End With
+                Case 4
+                    With My.Settings
+                        SatoUtilities.ThisSessionAddr = .ShippingA_PrinterAddr
+                        SatoPrintJob.ThisSessionAddr = .ShippingA_PrinterAddr
+                        SatoPrintJob.ThisSessionH = .ShippingA_Horizontal
+                        SatoPrintJob.ThisSessionV = .ShippingA_Vertical
+                        SatoPrintJob.ThisSessionR = .ShippingA_Rotation
+                        SatoPrintJob.ThisSessionS = .ShippingA_Size
+                    End With
+                Case 5
+            End Select
+
+            Select Case tabIndex
+                Case 1, 3, 4
+                    'SatoUtilities.PrinterStatus()
+                    SatoPrintJob.TransmitImage(imagePath, False)
+                Case 2
+                    'CabUtilities.PrinterStatus()
+                    CabPrintJob.TransmitImage(imagePath, False)
+                Case 5
+            End Select
+        Else
+            MsgBox("No test print file exists, please verify settings and click save")
+        End If
     End Sub
 
+    ''' <summary>
+    '''     Convert the image to a smaller more manageable 4-bit png
+    ''' </summary>
+    Private Shared Function ConvertImage(filepath As String) As String
+        Using image As New Bitmap(filepath)
+            'Do Stuff
+            'Convert it to 4BPP
+            Using imageConv = BitmapEncoder.ConvertBitmapToSpecified(image, 8)
+                'Update the filepath for saving
+                filepath = Path.GetTempPath & "IntegraTestLabel.png"
+                'Save to disk
+                If File.Exists(filepath) Then
+                    File.Delete(filepath)
+                End If
+                imageConv.Save(filepath)
+            End Using
+        End Using
+        ConvertImage = filepath
+    End Function
+
+    Private Function FormCheck(formName As String) As Boolean
+        Dim fc As FormCollection = Application.OpenForms
+        For Each f In fc
+            If f.Name = formName Then Return True
+        Next
+        Return False
+    End Function
     Private Sub DatabaseSettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) _
         Handles DatabaseSettingsToolStripMenuItem.Click
         Dim dbSettingsForm As New FormSettingsDb
@@ -44,6 +141,45 @@ Public Class FormSettingsPrinter
     Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
         Dim aboutForm As New FormAbout
         aboutForm.Show()
+    End Sub
+
+    Sub VisitLink(url As String)
+        ' Change the color of the link text by setting LinkVisited
+        ' to True.
+        urlSFP.LinkVisited = True
+        ' Call the Process.Start method to open the default browser
+        ' with a URL:
+        Process.Start("http://" & url)
+    End Sub
+
+    Private Sub urlXFP_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles urlXFP.LinkClicked
+        VisitLink(txtXFPIP.Text)
+    End Sub
+
+    Private Sub urlSFP_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles urlSFP.LinkClicked
+        VisitLink(txtSFPIP.Text)
+    End Sub
+
+    Private Sub urlClamshell_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) _
+        Handles urlClamshell.LinkClicked
+        VisitLink(txtClamshellIP.Text)
+    End Sub
+
+    Private Sub urlShippingA_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) _
+        Handles urlShippingA.LinkClicked
+        VisitLink(txtShippingAIP.Text)
+    End Sub
+
+    Private Sub urlShippingM_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) _
+        Handles urlShippingM.LinkClicked
+        VisitLink(txtShippingMIP.Text)
+    End Sub
+
+    Private Sub TestPrintToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TestPrintToolStripMenuItem.Click
+        If FormCheck("FormTestSettings") = False Then
+            Dim testForm As New FormTestSettings
+            testForm.Show()
+        End If
     End Sub
 
     Friend Sub UpdateFormFields()
@@ -188,38 +324,6 @@ Public Class FormSettingsPrinter
             End Using
             connection.Close()
         End Using
-    End Sub
-
-    Sub VisitLink(url As String)
-        ' Change the color of the link text by setting LinkVisited
-        ' to True.
-        urlSFP.LinkVisited = True
-        ' Call the Process.Start method to open the default browser
-        ' with a URL:
-        Process.Start("http://" & url)
-    End Sub
-
-    Private Sub urlXFP_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles urlXFP.LinkClicked
-        VisitLink(txtXFPIP.Text)
-    End Sub
-
-    Private Sub urlSFP_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles urlSFP.LinkClicked
-        VisitLink(txtSFPIP.Text)
-    End Sub
-
-    Private Sub urlClamshell_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) _
-        Handles urlClamshell.LinkClicked
-        VisitLink(txtClamshellIP.Text)
-    End Sub
-
-    Private Sub urlShippingA_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) _
-        Handles urlShippingA.LinkClicked
-        VisitLink(txtShippingAIP.Text)
-    End Sub
-
-    Private Sub urlShippingM_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) _
-        Handles urlShippingM.LinkClicked
-        VisitLink(txtShippingMIP.Text)
     End Sub
 
 End Class

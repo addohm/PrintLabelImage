@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_29A1A2D56D704467B96962CAEF02EED3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4656EA2FB2469C899A6DE43347DE09E8"
         "OwnerKey" = "8:_A24865D169DC4F34BCF5314C79205148"
         "MsmSig" = "8:_UNDEFINED"
@@ -156,6 +162,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_29A1A2D56D704467B96962CAEF02EED3"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\Business\\Graphics\\ailogosm.ico"
+            "TargetName" = "8:ailogosm.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_F6504B9B950344EA8E4A64C34EC5532E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4656EA2FB2469C899A6DE43347DE09E8"
             {
             "AssemblyRegister" = "3:1"
@@ -306,7 +332,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Robotics Labeler Image Printer"
         "ProductCode" = "8:{D9343AA5-746D-4CEB-B9E1-76A2E07F6FE7}"
-        "PackageCode" = "8:{BF677E30-2FCB-47F6-8D94-03B228973C8C}"
+        "PackageCode" = "8:{79CCEA0D-9072-4A8A-A5CD-862BE145FFFB}"
         "UpgradeCode" = "8:{CECD8FE1-AF01-40A3-9ECB-B25DF962CE78}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -323,7 +349,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:http://automationintegrity.net"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_29A1A2D56D704467B96962CAEF02EED3"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"

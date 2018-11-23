@@ -89,7 +89,7 @@ Class PaintCanvass
     Public Property Resolution As Integer
     Public Property Interval As Integer
 
-    Public Property hdots As Integer
+    Public ReadOnly Property hdots As Integer
         Get
             If UOM.ToLower() = "mm" Then
                 Return Convert.ToInt32(Width * 0.03937008F * Resolution)
@@ -97,12 +97,9 @@ Class PaintCanvass
                 Return Convert.ToInt32(Width * Resolution)
             End If
         End Get
-        Private Set(value As Integer)
-
-        End Set
     End Property
 
-    Public Property vdots As Integer
+    Public ReadOnly Property vdots As Integer
         Get
             If UOM.ToLower() = "mm" Then
                 Return Convert.ToInt32(Height * 0.03937008F * Resolution)
@@ -110,27 +107,18 @@ Class PaintCanvass
                 Return Convert.ToInt32(Height * Resolution)
             End If
         End Get
-        Private Set(value As Integer)
-
-        End Set
     End Property
 
-    Public Property horizontalLinesQuantity As Integer
+    Public ReadOnly Property horizontalLinesQuantity As Integer
         Get
             Return vdots / Interval
         End Get
-        Private Set(value As Integer)
-
-        End Set
     End Property
 
-    Public Property verticalLinesQuantity As Integer
+    Public ReadOnly Property verticalLinesQuantity As Integer
         Get
             Return hdots / Interval
         End Get
-        Private Set(value As Integer)
-
-        End Set
     End Property
 
 End Class
